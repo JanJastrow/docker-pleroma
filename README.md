@@ -161,9 +161,17 @@ You can now setup a Nginx reverse proxy in a container or on your host by using 
 
 ### Update
 
-By default, the Dockerfile will be built from the latest commit of the `develop` branch as Pleroma does not have releases for now.
+By default, the Dockerfile will be built from the latest commit of the `develop` branch.
 
-Thus to update, just rebuild your image and recreate your containers:
+If you want to run a specific commit, you can use the `PLEROMA_VER` variable:
+
+```sh
+docker build -t pleroma . --build-arg PLEROMA_VER=develop # a branch
+docker build -t pleroma . --build-arg PLEROMA_VER=a9203ab3 # a commit
+docker build -t pleroma . --build-arg PLEROMA_VER=v2.0.7 # a version
+```
+
+To update, just rebuild your image and recreate your containers:
 
 ```sh
 docker-compose pull # update the PostgreSQL if needed
@@ -172,14 +180,6 @@ docker-compose build .
 docker build -t pleroma .
 docker-compose run --rm web mix ecto.migrate # migrate the database if needed
 docker-compose up -d # recreate the containers if needed
-```
-
-If you want to run a specific commit, you can use the `PLEROMA_VER` variable:
-
-```sh
-docker build -t pleroma . --build-arg PLEROMA_VER=develop # a branch
-docker build -t pleroma . --build-arg PLEROMA_VER=a9203ab3 # a commit
-docker build -t pleroma . --build-arg PLEROMA_VER=v2.0.7 # a version
 ```
 
 `a9203ab3` being the hash of the commit. (They're [here](https://git.pleroma.social/pleroma/pleroma/commits/develop))
